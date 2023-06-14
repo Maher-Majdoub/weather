@@ -34,10 +34,13 @@
         </div>
     </header>
     <main>
+        <div class="loading">
+            <div><div class="spinner"></div></div>
+        </div>
         <div class="todays-weather">
             <div class="global-infos">
                 <div class="weather-vid">
-                    <video src="assets/images/rain.mp4" autoplay loop></video>
+                    <video src="assets/images/rain.mp4" loop muted type="video/mp4" ></video>
                 </div>
                 <div class="card">
                     <div>
@@ -118,7 +121,6 @@
                     <div class="swiper">
                         <div class="swiper-wrapper" id="forecast-wrapper">
                         </div>
-                        <div class="swiper-pagination"></div>
                         <div class="swiper-button-prev"></div>
                         <div class="swiper-button-next"></div>
                     </div>

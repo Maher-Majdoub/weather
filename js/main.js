@@ -1,6 +1,33 @@
 const API_KEY = 'b197bfc6ce9a58ea446d4d4f2dd63820';
-let lat = 51.509865;
-let lon = -0.118092;
+let lat = 0;
+let lon = 0;
+const ipUrl = 'https://api.ipify.org?format=json';
+const ipKEY = '826a8770-6f8a-43a1-bb2e-b6555f6268c3';
+
+async function getIp() {
+    let data = await fetch(ipUrl);
+    return await data.json();
+}
+
+async function getLoc(){
+    const ip = await getIp();
+    const loc = await fetch(`https://ipfind.co/?ip=${ip.ip}&auth=${ipKEY}`);
+    return await loc.json();
+   
+}
+
+async function getCurrLocation (){
+    try {
+        const currGeo = await  getLoc();
+        lat = currGeo.latitude;
+        lon = currGeo.longitude;
+    }
+    catch {
+        lat = 51.509865;
+        lon = -0.118092;
+    };
+    
+}
 
 const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const days = [ "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday",];
@@ -100,7 +127,6 @@ function fillForecast(){
         }
     }
     function fillHourly() {
-        console.log(forecast.list)
         forecast.list.forEach((elem) => {
             let date = new Date(elem.dt * 1000);
             date = `${days[date.getDay()].slice(0, 3)} ${date.getHours()}:00`;
@@ -110,7 +136,6 @@ function fillForecast(){
             wrapper.appendChild(createForecatCard(date, icon, temp, desc));
         });
     }
-    console.log(forecast);
     const wrapper = document.getElementById('forecast-wrapper');
     wrapper.style.transform = 'translate3d(0px, 0px, 0px)';
     wrapper.innerHTML = '';
@@ -120,6 +145,7 @@ function fillForecast(){
         case 'daily' : fillDaily(); break;
         default : fillHourly();
     }
+    let swiper =  createNewSwipper();
 }
 
 function createNewSwipper() {
@@ -155,10 +181,14 @@ function createNewSwipper() {
     });
 }
 
-async function main() {
+async function main(){
+    const loader = document.querySelector('main .loading');
+    const main = document.querySelector('main .todays-weather');
+    loader.style.display = 'block';
+    main.style.display = 'none';
+    
     try {
         await collectData();
-        fillCurrentWeather();
     }
     catch (err) {
         document.body.innerHTML = `
@@ -166,11 +196,21 @@ async function main() {
         `;
         return;
     }
+    fillCurrentWeather();
     fillForecast();
+    document.querySelector('.weather-vid > video').play();
     let swiper = createNewSwipper();
     document.getElementById('forecast-filter').onchange = () => {
         fillForecast();
-        swiper =  createNewSwipper();
+        // swiper =  createNewSwipper();
     } 
+    main.style.display = 'flex';
+    loader.style.display = 'none';
 }
-main();
+
+async function firstFct() {
+    await getCurrLocation();
+    main();
+}
+
+firstFct();

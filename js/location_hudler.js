@@ -1,21 +1,5 @@
-const url = 'https://api.ipify.org?format=json';
-const KEY = '051990c5-e79f-432b-a0a1-3aac77bbacdd';
-
-async function getIp() {
-    let data = await fetch(url);
-    return await data.json();
-}
-
-async function getLoc(){
-    const ip = await getIp();
-    console.log(ip);
-    const loc = await fetch(`https://ipfind.co/?ip=${ip.ip}&auth=${KEY}`);
-    return await loc.json();
-}
 async function changeLocation() {
-    console.log('clicked')
     const location = await getLoc();
-    console.log(location);
     lat = location.latitude;
     lon = location.longitude;
     main();
@@ -121,17 +105,11 @@ async function showStates(val) {
         }
     }
     else stateAutoComplete.style.display = 'none';
-
-    console.log('im here yuo');
-    console.log(country)
-    console.log(states)
 }
 
 function searchCountry(c, begin=0, end=countries.length - 1) {
     if (begin > end) return false;
-
     const mid = Math.round((begin + end) / 2);
-
     if (countries[mid].toLocaleLowerCase() === c) return true;
     else if (countries[mid].toLocaleLowerCase() > c) return searchCountry(c, begin, mid - 1);
     else return searchCountry(c, mid + 1, end);
@@ -143,14 +121,11 @@ const getLocationBtn = document.getElementById('get-location-btn');
 getLocationBtn.onclick = async () => {
     const country = countryInput.value.toLowerCase();
     const state = stateInput.value.toLowerCase();
-
     if (!searchCountry(country.toLocaleLowerCase())) {
-        console.log('country not found');
-        return
+        return;
     }
     const states = searchCountryStates(country);
     for (i in states) {
-        console.log(states[i].name)
         if (states[i].name.toLowerCase() === state) {
             lat = states[i].latitude;
             lon = states[i].longitude;
