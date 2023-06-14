@@ -353,6 +353,7 @@ h2 {
         grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
     }
 }
+
 @media (max-width: 768px) {
     .todays-weather .global-infos .card > div:first-child {
         padding-right: 10px;
@@ -361,12 +362,22 @@ h2 {
         width: 90%;
     }
 }
-@media (max-width: 480px) {
+@media (max-width: 600px) {
     header {
-        padding: 0 5px;
+        flex-direction: column;
+        height: 100px;
+        padding: 15px
     }
+    header .location {
+        align-self: flex-end;
+    }
+}
+@media (max-width: 480px) {
+    
     header .location input {
+        font-size: 15px;
         width: 100px;
+        height: 25px;
     }
     .todays-weather .global-infos .card {
         flex-direction: column;
